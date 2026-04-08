@@ -176,62 +176,70 @@ function initGSAP() {
 
   // ── Generic .reveal elements ─────────────────────────
   document.querySelectorAll('.reveal').forEach(el => {
-    gsap.from(el, {
-      y: 40,
-      opacity: 0,
-      duration: 0.9,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 88%',
-        toggleActions: 'play none none none',
-      },
-    });
+    gsap.fromTo(el,
+      { y: 40, opacity: 0 },
+      {
+        y: 0, opacity: 1,
+        duration: 0.9,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
   });
 
   // ── Stagger grids ────────────────────────────────────
   document.querySelectorAll('.stagger-grid').forEach(grid => {
-    gsap.from(Array.from(grid.children), {
-      y: 30,
-      opacity: 0,
-      duration: 0.7,
-      stagger: 0.12,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: grid,
-        start: 'top 88%',
-        toggleActions: 'play none none none',
-      },
-    });
+    gsap.fromTo(Array.from(grid.children),
+      { y: 30, opacity: 0 },
+      {
+        y: 0, opacity: 1,
+        duration: 0.7,
+        stagger: 0.12,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: grid,
+          start: 'top 88%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
   });
 
   // ── Features grid cards (individual) ─────────────────
   const featuresGrid = document.querySelector('.features-grid');
   if (featuresGrid) {
-    gsap.from(featuresGrid.querySelectorAll('.feature-card'), {
-      y: 30,
-      opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: featuresGrid,
-        start: 'top 85%',
-        toggleActions: 'play none none none',
-      },
-    });
+    gsap.fromTo(featuresGrid.querySelectorAll('.feature-card'),
+      { y: 30, opacity: 0 },
+      {
+        y: 0, opacity: 1,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: featuresGrid,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
   }
 
   // ── Hero content stagger ─────────────────────────────
   const heroEls = document.querySelectorAll('.hero-content .reveal');
   heroEls.forEach((el, i) => {
-    gsap.from(el, {
-      y: 30,
-      opacity: 0,
-      duration: 0.8,
-      delay: 0.3 + i * 0.15,
-      ease: 'power2.out',
-    });
+    gsap.fromTo(el,
+      { y: 30, opacity: 0 },
+      {
+        y: 0, opacity: 1,
+        duration: 0.8,
+        delay: 0.3 + i * 0.15,
+        ease: 'power2.out',
+      }
+    );
   });
 
   // ── Counter animations ───────────────────────────────
@@ -262,17 +270,19 @@ function initGSAP() {
 
   // ── Section heading parallax ─────────────────────────
   gsap.utils.toArray('.section-title').forEach(title => {
-    gsap.from(title, {
-      y: 20,
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: title,
-        start: 'top 88%',
-        toggleActions: 'play none none none',
-      },
-    });
+    gsap.fromTo(title,
+      { y: 20, opacity: 0 },
+      {
+        y: 0, opacity: 1,
+        duration: 0.8,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: title,
+          start: 'top 88%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
   });
 
   // ── Product cards tilt ───────────────────────────────
@@ -391,54 +401,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initMigrationDot();
   initSmoothScroll();
 
-  // Subtle bg noise / grain layer via canvas (optional premium touch)
-  initGrainEffect();
 });
 
-/* ═══════════════════════════════════════════════════════
-   OPTIONAL: Subtle animated grain/noise overlay
-   (Adds premium feel — very subtle, dark)
-═══════════════════════════════════════════════════════ */
-function initGrainEffect() {
-  const canvas = document.createElement('canvas');
-  canvas.width = 256;
-  canvas.height = 256;
-  canvas.style.cssText = `
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.02;
-    mix-blend-mode: overlay;
-  `;
-
-  const ctx = canvas.getContext('2d');
-
-  function generateNoise() {
-    const imageData = ctx.createImageData(256, 256);
-    const data = imageData.data;
-    for (let i = 0; i < data.length; i += 4) {
-      const v = Math.floor(Math.random() * 255);
-      data[i] = v;
-      data[i + 1] = v;
-      data[i + 2] = v;
-      data[i + 3] = 255;
-    }
-    ctx.putImageData(imageData, 0, 0);
-  }
-
-  generateNoise();
-  document.body.appendChild(canvas);
-
-  // Animate grain
-  let frameCount = 0;
-  function animateGrain() {
-    requestAnimationFrame(animateGrain);
-    frameCount++;
-    if (frameCount % 3 === 0) {
-      generateNoise();
-    }
-  }
-  animateGrain();
-}
+/* Grain effect removed — caused rendering issues on iOS */

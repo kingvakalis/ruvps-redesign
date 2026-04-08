@@ -26,10 +26,8 @@
 
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Ensure GSAP content is visible even if JS fails -->
-  <style>
-    .reveal, .stagger-grid > *, .feature-card { opacity: 1; }
-  </style>
+  <!-- Fallback: if JS fails, content still visible -->
+  <noscript><style>.reveal, .stagger-grid > *, .feature-card { opacity: 1 !important; transform: none !important; }</style></noscript>
 </head>
 <body>
 
