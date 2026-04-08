@@ -3,14 +3,30 @@
  * Main JavaScript: Three.js hero, GSAP animations, interactions
  */
 
-import * as THREE from 'three';
-
 /* ═══════════════════════════════════════════════════════
    THREE.JS HERO SCENE
 ═══════════════════════════════════════════════════════ */
-function initThreeScene() {
+async function initThreeScene() {
   const container = document.getElementById('hero-canvas');
   if (!container) return;
+
+  let THREE;
+  try {
+    THREE = await import('three');
+  } catch (e) {
+    console.warn('Three.js failed to load, using CSS fallback');
+    container.style.background = 'radial-gradient(ellipse at 50% 50%, rgba(0,136,255,0.08) 0%, transparent 60%)';
+    return;
+  }
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  } catch (e) {
+    console.warn('WebGL unavailable, using CSS fallback');
+    container.style.background = 'radial-gradient(ellipse at 50% 50%, rgba(0,136,255,0.08) 0%, transparent 60%)';
+    return;
+  }
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
@@ -21,10 +37,6 @@ function initThreeScene() {
   );
   camera.position.z = 5;
 
-  const renderer = new THREE.WebGLRenderer({
-    alpha: true,
-    antialias: true,
-  });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
@@ -396,8 +408,8 @@ function initGrainEffect() {
     top: 0; left: 0;
     width: 100vw; height: 100vh;
     pointer-events: none;
-    z-index: 9999;
-    opacity: 0.025;
+    z-index: 0;
+    opacity: 0.02;
     mix-blend-mode: overlay;
   `;
 
